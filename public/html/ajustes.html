@@ -1,0 +1,85 @@
+<!--Ajuste Sirve para configurar los sensores del sistema -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajustes del Sistema</title>
+    <link rel="stylesheet" href="/css/ajustes.css">
+</head>
+<body>
+    <header>
+        <h1>Ajustes del Sistema</h1>
+        <nav>
+            <ul>
+                <li><a href="/html/main.html">Inicio</a></li>
+                <li><a href="/html/historial.html">Historial</a></li>
+                <li><a href="/html/sensores.html">Sensores</a></li>
+                <li><a href="/html/ajustes.html" class="active">Ajustes</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="ajustes">
+            <h2>Configuración de Parámetros</h2>
+            <form id="settings-form">
+                <div class="form-group">
+                    <label for="monitoring-interval">Intervalo de Monitoreo (minutos)</label>
+                    <input type="number" id="monitoring-interval" name="monitoring-interval" value="5" min="1" required>
+                </div>
+                <div class="form-group">
+                    <label for="temperature-threshold">Umbral de Temperatura (°C)</label>
+                    <input type="number" id="temperature-threshold" name="temperature-threshold" value="25" min="1" required>
+                </div>
+                <div class="form-group">
+                    <label for="humidity-threshold">Umbral de Humedad (%)</label>
+                    <input type="number" id="humidity-threshold" name="humidity-threshold" value="60" min="1" required>
+                </div>
+                <div class="form-group">
+                    <label for="watering-schedule">Programar Riego (minutos)</label>
+                    <input type="number" id="watering-schedule" name="watering-schedule" value="15" min="1" required>
+                </div>
+                <div class="actions">
+                    <button type="submit">Guardar Ajustes</button>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Monitoreo de Orquídeas. Todos los derechos reservados.</p>
+    </footer>
+
+    <script>
+        // Función para manejar la actualización de ajustes
+        document.getElementById('settings-form').addEventListener('submit', async function (event) {
+            event.preventDefault(); // Evitar el envío normal del formulario
+
+            const formData = new FormData(event.target);
+            const data = {
+                monitoringInterval: formData.get('monitoring-interval'),
+                temperatureThreshold: formData.get('temperature-threshold'),
+                humidityThreshold: formData.get('humidity-threshold'),
+                wateringSchedule: formData.get('watering-schedule')
+            };
+
+            // Enviar los datos al servidor para actualizar la configuración
+            const response = await fetch('/ajustes', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+            if (result.success) {
+                alert('Ajustes guardados con éxito');
+            } else {
+                alert('Error al guardar los ajustes');
+            }
+        });
+    </script>
+</body>
+</html>

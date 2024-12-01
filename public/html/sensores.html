@@ -1,0 +1,90 @@
+<!--Gestion de sensores, mostrar los sensores que hayan conectados al arduino
+junto con sus acciones estados, conexiones.-->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Sensores</title>
+    <link rel="stylesheet" href="/css/sensores.css">
+</head>
+<body>
+    <header>
+        <h1>Gestión de Sensores</h1>
+        <nav>
+            <ul>
+                <li><a href="/html/main.html">Inicio</a></li>
+                <li><a href="/html/historial.html">Historial</a></li>
+                <li><a href="/html/sensores.html" class="active">Sensores</a></li>
+                <li><a href="/html/ajustes.html">Ajustes</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="sensores">
+            <h2>Listado de Sensores</h2>
+            <table id="sensores-table">
+                <thead>
+                    <tr>
+                        <th>Nombre del Sensor</th>
+                        <th>Tipo de Conexión</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Aquí se llenarán las filas con los sensores -->
+                </tbody>
+            </table>
+            <section class="actions">
+                <button id="add-sensor">Añadir Sensor</button>
+            </section>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Monitoreo de Orquídeas. Todos los derechos reservados.</p>
+    </footer>
+
+    <script>
+        // Función para obtener los sensores desde el servidor
+        async function fetchSensores() {
+            const response = await fetch('/sensores');
+            const data = await response.json();
+            
+            const tableBody = document.getElementById('sensores-table').querySelector('tbody');
+            tableBody.innerHTML = ''; // Limpiar cualquier contenido anterior
+            
+            // Llenar la tabla con los datos de los sensores
+            data.forEach(sensor => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${sensor.nombre_sensor}</td>
+                    <td>${sensor.tipo_conexion}</td>
+                    <td>${sensor.estado ? 'Activo' : 'Inactivo'}</td>
+                    <td>
+                        <button onclick="toggleSensor(${sensor.id_sensor})">${sensor.estado ? 'Desactivar' : 'Activar'}</button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Función para activar o desactivar un sensor
+        async function toggleSensor(sensorId) {
+            const response = await fetch(`/sensores/${sensorId}/toggle`, { method: 'POST' });
+            const data = await response.json();
+            
+            if (data.success) {
+                fetchSensores(); // Volver a cargar la lista de sensores después de modificar el estado
+            } else {
+                alert('Hubo un error al cambiar el estado del sensor.');
+            }
+        }
+
+        // Llamar a la función al cargar la página
+        window.onload = fetchSensores;
+    </script>
+</body>
+</html>
