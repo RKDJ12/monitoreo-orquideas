@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Monitoreo de Orquídeas</title>
     <link rel="stylesheet" href="/css/main.css">
+    <!-- Agregar la librería MQTT.js -->
+<script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+<!-- Área para las notificaciones -->
+<div id="notifications"></div>
+
 </head>
 <body>
     <header>
@@ -25,11 +30,11 @@
             <div class="cards">
                 <div class="card">
                     <h3>Humedad</h3>
-                    <p>80%</p>
+                    <p id="humidity">Esperando datos...</p>
                 </div>
                 <div class="card">
                     <h3>Temperatura</h3>
-                    <p>22°C</p>
+                    <p id="temperature">Esperando datos...</p>
                 </div>
             </div>
         </section>
@@ -43,5 +48,9 @@
     <footer>
         <p>&copy; 2024 Monitoreo de Orquídeas. Todos los derechos reservados.</p>
     </footer>
+
+    <!-- Vincular el archivo JavaScript -->
+    <script src="/js/main.js"></script>
+    <script src="/js/notis.js"></script>
 </body>
 </html>

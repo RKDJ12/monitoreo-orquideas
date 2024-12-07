@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Historial de Condiciones Ambientales</title>
     <link rel="stylesheet" href="/css/historial.css">
+
+    <!-- Incluir SheetJS desde CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>
 </head>
 <body>
     <header>
@@ -22,12 +25,15 @@
     <main>
         <section class="historial">
             <h2>Historial de Datos Ambientales</h2>
+            <!-- Botón para generar el archivo Excel -->
+            <button id="downloadExcel">Generar Excel</button>
             <table id="historial-table">
                 <thead>
                     <tr>
                         <th>Fecha</th>
                         <th>Humedad (%)</th>
                         <th>Temperatura (°C)</th>
+                        <th>Sensor</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -40,30 +46,6 @@
     <footer>
         <p>&copy; 2024 Monitoreo de Orquídeas. Todos los derechos reservados.</p>
     </footer>
-
-    <script>
-        // Función para obtener el historial desde el servidor
-        async function fetchHistorial() {
-            const response = await fetch('/historial');
-            const data = await response.json();
-            
-            const tableBody = document.getElementById('historial-table').querySelector('tbody');
-            tableBody.innerHTML = ''; // Limpiar cualquier contenido anterior
-            
-            // Llenar la tabla con los datos del historial
-            data.forEach(item => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${new Date(item.fecha).toLocaleString()}</td>
-                    <td>${item.humedad}</td>
-                    <td>${item.temperatura}</td>
-                `;
-                tableBody.appendChild(row);
-            });
-        }
-
-        // Llamar a la función al cargar la página
-        window.onload = fetchHistorial;
-    </script>
+    <script src="/js/historial.js"></script>
 </body>
 </html>
